@@ -1,13 +1,21 @@
+%Program for learning the Fast Fourier Transforms application on a simple harmonic balance problem x"+x = sin(wd*t), wd = Driving Frequency
 function x = NLDV()
 clc
 clear all
 close all
-
+%Assumed frequency
 f =3;
 
-% initial guess
-x = [sin(0) sin(120) sin(240)]
-theta = [0 120/180*pi 240/180*pi]
+% initial guess of displacement for the equation
+prompt = 'your initial or start position angle';
+A= input(prompt);
+prompt1 = 'Total period of single continuous cycle';
+p=(input(prompt1))/4;
+%Displacement
+x = [sin(A+(p*0)) sin(A+(p*1)) sin(A+(p*2))]
+%converting theta from degrees to radians
+theta = [p*0 pi*((p*1)/180) pi*((p*2)/180)]
+%Applying fast fourier transformation for finding closest Displacement value
 y1 = fft(x)
 
 % time
