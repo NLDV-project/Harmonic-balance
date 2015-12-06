@@ -1,4 +1,4 @@
-%dotdot x+x=sin(2*w*t)
+%dotdot x+x=cos(2*w*t)
 clc
 clear all
 close all
