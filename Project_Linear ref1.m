@@ -2,10 +2,10 @@
 clc
 clear all
 close all
-f=3; w=2*pi*f; c=3; T=1/f; N=19;
+f=3; w=2*pi*f; c=2; T=1/f; N=20;
 linewidth=5
 t=(0:1:N-1)*T/N;
-theta= ((2*pi*2/((ceil(N))))*linspace(ceil(-N/2),ceil(N/2),1));
+theta= ((2*pi/((ceil(N/2))))*linspace(ceil(-N/2),ceil(N/2),1));
 x = sin(c*w*t); %initial guess (time domain)
 X=(fft(x)) %frequency domain
 w1 = theta/T;
