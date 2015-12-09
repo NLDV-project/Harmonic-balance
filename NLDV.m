@@ -1,103 +1,34 @@
-function x = NLDV()
 clc
-clear all
 close all
-
-f =3;
-
-% initial guess
-x = [sin(0) sin(120) sin(240)]
-theta = [0 120/180*pi 240/180*pi]
-y1 = fft(x)
-
-% time
-T = inv(f);
-delta_t = T/4
-t = delta_t*[0,1,2]
+clear all
+%x''+x = sin(0.9t)
+w=0.9;
+f = w/(2*pi);
+n=31;
+T=inv(f);
+delta_t = T/(n-1);
+t=linspace(0,T,n);
 i = sqrt(-1);
-w_i = (pi-(theta.*delta_t/(2*pi)))*i
-% w_i = [0,3*i,6*i,-3*i];
-v1 = w_i.*y1;
-u1 = ifft(v1);
+wi= [0,(1:1:((n-1)/2)),-((n-1)/2:-1:1)]*((2*pi/T))*i;
+F= sin(w.*t);
+X=F./(1-w.^2);
 
-a = init();
-for n=1:1:3
-        x2(n) = 2*sin(2*pi*n*t(1,n))-x(n);
-    end
-    A = fft(x2);
-    X(1) = 0;
-    c = w_i.^2;
-    for n=2:1:3
-        X(n) = (-1/(w_i(n)^2))*A(n);
-    end
-x = fft(X);
-d1 = x;
-count = 1;
-while d1-a~= 0
-    a= d1;
-    for n=1:1:3
-        x2(n) = 2*sin(2*pi*n*t(1,n))-x(n);
-    end
-    A = fft(x2);
-    X(1) = 0;
-    c = w_i.^2;
-    for n=2:1:3
-        X(n) = (-1/(w_i(n)^2))*A(n);
-    end
-x = fft(X);
-d1 = x;
-count = count+1
-end 
-end 
-
-function x = init()
-f = 3;
-% initial guess
-x = [sin(0) sin(120) sin(240)]
-theta = [0 120/180*pi 240/180*pi]
-y1 = fft(x);
-
-% time
-T = inv(f);
-delta_t = T/4;
-t = delta_t*[0,1,2];
-i = sqrt(-1);
-w = 2*pi*f;
-w_i = (pi-(theta.*delta_t/(2*pi)))*i
-v1 = w_i.*y1;
-u1 = ifft(v1);
-for n=1:1:3
-x2(n) = sin(2*pi*n*t(1,n))-x(n);
+x_w= fft(F);
+vw = wi.*x_w; 
+vt = ifft(vw);
+aw = (F-x_w);
+xw = aw./wi.^2;
+xw(1) = 0;
+xt = ifft(xw);
+at = wi.^2.*xt;
+vt = wi.*xt;
+for n1 =1:1:(n-1)/2
+    res(n1) =abs(at(n1)+F(n1)-xt(1)-((0.5*xt(n1+1))*exp(i*w*t(n1)))-((0.5*xt(end-n1))*exp(i*w*t(n1))));
 end
-A = fft(x2);
-X(1) = 0;
-c = w_i.^2;
-for n=2:1:3
-    X(n) = (-1/(w_i(n)^2))*A(n);
-end
-x = fft(X);
-end
+e = sum(res);
+x = xt./(1-w.^2);
+figure(1)
+plot(t,x,t,X,'*');
 
-
-% function x = ite()
-% f=3;
-% T = inv(f);
-% delta_t = T/4;
-% t = delta_t*[0,1,2,3];
-% for n=1:1:4
-% x2(n) = sin(2*pi*n*t(1,n))-x(n);
-% end
-% A = fft(x2);
-% X(1) = 0;
-% c = w_i.^2;
-% for n=2:1:4
-%     X(n) = (-1/(w_i(n)^2))*A(n);
-% end
-% x = fft(X);
-% end
-
-% function [d x] = ite2()
-% d = d1(NLDV) - ite()
-% end
 
 
