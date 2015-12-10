@@ -7,15 +7,15 @@ w=0.9;
 f = w/(2*pi);
 n=31;
 T=inv(f);
-delta_t = T/(n-1);
 t=linspace(0,T,n);
 i = sqrt(-1);
 wi= [0,(1:1:((n-1)/2)),-((n-1)/2:-1:1)]*((2*pi/T))*i;
-F= sin(w.*t);
-X=(1-wi.^2).^-1;
-xw = fft(F);
+F= sin(w.*t); % forcing function
+f_n = 0;
+f = f_n+F;
+xw = fft(f);
 x=fminsearch(logic(),xw);
-global wi, f, n, T, i,wi, F,X,xw
+global wi, f, n, T, i,wi, F,xw, f_n
 
 function res = logic()
 aw = wi.^2.*xw;
@@ -23,7 +23,7 @@ vw = wi.*xw;
 at = ifft(aw);
 vt = ifft(vw);
 xt = at./wi.^2;
-res = @(xw) sum(abs(at+xt+0*vt-F)); 
+res = @(xw) sum(abs(at+f+0*vt-F)); 
 end
 
 figure(1)
