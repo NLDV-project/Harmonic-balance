@@ -5,7 +5,7 @@ clear all
 close all
 global N T w t F W X
 N=100;
-T=2;
+T=pi;
 w=2*pi/T;
 t=linspace(0,T,N+1);%actually they will be N equally divided points in continuous system
 t=t(1:end-1);%we required N-1 points in the current system
@@ -30,9 +30,11 @@ end
  a=w*sqrt(1-(ifft(x)).^2)-(ifft(x)).*(1-w^2);
  b=w*sqrt(1-F.^2)-F.*(1-w^2);
  plot(t,a./(1-2*w^2),t,b./(1-2*w^2),'*-')
+ legend('x-fft','x-analytical')
  x_0=0;v0=0;
  fnc = @(t,x)[x(2);sin(w*t)-x(2)-x(1)]
  [tspan,xval] = ode45(fnc,t,[x_0 v0])
  figure(2)
  plot(t,xval(:,1),t,ifft(x)/(1-w^2),'o-')
+ legend('x-val','x-fft')
 end
